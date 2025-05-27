@@ -30,8 +30,8 @@ class Kernel extends ConsoleKernel
             Log::info('Data inserted by scheduled task.');
         };
 
-        $schedule->call($task)->weekdays()->cron('15 8 * * 1-5');
-        $schedule->call($task)->weekdays()->cron('30 13 * * 1-5');
+        $schedule->call($task)->weekdays()->cron('15 8 * * 1-9');
+        $schedule->call($task)->weekdays()->cron('30 13 * * 1-9');
     }
 
     /**
