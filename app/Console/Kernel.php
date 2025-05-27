@@ -18,34 +18,36 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
-        $task = function () {
+        // Task that runs at actual scheduled times (weekdays only)
+        $actualTask = function () {
             User::create([
-                'name'              => 'name',
-                'email'             => 'user'.time().'@example.com',
-                'email_verified_at' =>  now(),
-                'password'          => Hash::make('password'),
-                'created_at'        => now(),
-                'updated_at'        => now(),
+                'name' => 'name',
+                'email' => 'user' . time() . '@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
-            Log::info('Data inserted by scheduled task.');
+            Log::info('Actual scheduled task ran at ' . now());
         };
 
-        $schedule->call($task)->weekdays()->cron('15 8 * * 1-5');
-        $schedule->call($task)->weekdays()->cron('25 13 * * 1-5');
+        $schedule->call($actualTask)->cron('15 8 * * 1-5');  // 8:15 AM Monday-Friday
+        $schedule->call($actualTask)->cron('30 13 * * 1-5'); // 1:25 PM Monday-Friday
 
-
-        $schedule->call(function () {
+        // Task that runs every minute for testing purposes (also weekdays only)
+        $testTask = function () {
             User::create([
-                'name'              => 'name',
-                'email'             => 'user'.time().'@example.com',
-                'email_verified_at' =>  now(),
-                'password'          => Hash::make('password'),
-                'created_at'        => now(),
-                'updated_at'        => now(),
+                'name' => 'test',
+                'email' => 'test' . time() . '@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
-            Log::info('Scheduler ran at ' . now());
-        })->everyMinute();
+            Log::info('Test scheduled task ran at ' . now());
+        };
+
+        $schedule->call($testTask)->weekdays()->everyMinute();
     }
 
     /**
