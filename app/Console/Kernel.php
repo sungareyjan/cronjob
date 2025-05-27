@@ -20,12 +20,16 @@ class Kernel extends ConsoleKernel
     {
         // Task that runs at actual scheduled times (weekdays only)
         $actualTask = function () {
-            User::create([
-                'name' => 'name',
-                'email' => 'user' . time() . '@example.com',
-                'password' => Hash::make('password'),
-            ]);
-            Log::info('Actual scheduled task ran at ' . now());
+           try {
+                User::create([
+                    'name' => 'test',
+                    'email' => 'test' . time() . '@example.com',
+                    'password' => Hash::make('password'),
+                ]);
+                Log::info('Test scheduled task ran at ' . now());
+            } catch (\Exception $e) {
+                Log::error('Test scheduled task failed: ' . $e->getMessage());
+            }
         };
 
         $schedule->call($actualTask)->cron('15 8 * * 1-5');  // 8:15 AM Monday-Friday
@@ -33,12 +37,16 @@ class Kernel extends ConsoleKernel
 
         // Task that runs every minute for testing purposes (also weekdays only)
         $testTask = function () {
-            User::create([
-                'name' => 'test',
-                'email' => 'test' . time() . '@example.com',
-                'password' => Hash::make('password'),
-            ]);
-            Log::info('Test scheduled task ran at ' . now());
+            try {
+                User::create([
+                    'name' => 'test',
+                    'email' => 'test' . time() . '@example.com',
+                    'password' => Hash::make('password'),
+                ]);
+                Log::info('Test scheduled task ran at ' . now());
+            } catch (\Exception $e) {
+                Log::error('Test scheduled task failed: ' . $e->getMessage());
+            };
         };
 
         $schedule->call($testTask)->weekdays()->everyMinute();
