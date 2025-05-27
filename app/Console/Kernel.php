@@ -23,10 +23,7 @@ class Kernel extends ConsoleKernel
             User::create([
                 'name' => 'name',
                 'email' => 'user' . time() . '@example.com',
-                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
             Log::info('Actual scheduled task ran at ' . now());
         };
@@ -39,10 +36,7 @@ class Kernel extends ConsoleKernel
             User::create([
                 'name' => 'test',
                 'email' => 'test' . time() . '@example.com',
-                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
             Log::info('Test scheduled task ran at ' . now());
         };
