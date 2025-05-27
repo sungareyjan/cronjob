@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +17,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+
+        $task = function () {
+            User::create([
+                'name'              => 'name',
+                'email'             => 'user'.time().'@example.com',
+                'email_verified_at' =>  now(),
+                'password'          => Hash::make('password'),
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ]);
+            Log::info('Data inserted by scheduled task.');
+        };
+
+        $schedule->call($task)->weekdays()->cron('15 8 * * 1-5');
+        $schedule->call($task)->weekdays()->cron('30 13 * * 1-5');
     }
 
     /**
